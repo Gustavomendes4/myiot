@@ -1,0 +1,151 @@
+
+
+<section id="mqtt-config">
+  <h2>Configuração MQTT</h2>
+
+  <!-- ================= CONEXÃO ================= -->
+  <fieldset>
+    <legend>Conexão com o Broker</legend>
+
+    <label>
+      Endereço do Broker
+      <input type="text" name="mqtt_host" placeholder="mqtt.exemplo.com ou 192.168.1.10" required>
+    </label>
+
+    <label>
+      Porta
+      <input type="number" name="mqtt_port" placeholder="1883" value="1883" required>
+    </label>
+
+    <label>
+      <input type="checkbox" name="mqtt_tls">
+      Usar TLS (SSL)
+    </label>
+  </fieldset>
+
+  <!-- ================= IDENTIFICAÇÃO ================= -->
+  <fieldset>
+    <legend>Identificação</legend>
+
+    <label>
+      Client ID
+      <input type="text" name="mqtt_client_id" placeholder="sensor_001">
+    </label>
+
+    <small>Se vazio, o sistema pode gerar automaticamente.</small>
+
+    <label>
+      Usuário
+      <input type="text" name="mqtt_user">
+    </label>
+
+    <label>
+      Senha
+      <input type="password" name="mqtt_password">
+    </label>
+  </fieldset>
+
+  <!-- ================= TÓPICOS ================= -->
+  <fieldset>
+    <legend>Tópicos</legend>
+
+    <label>
+      Tópico Base
+      <input type="text" name="mqtt_topic_base" placeholder="fazenda1/setor3">
+    </label>
+
+    <label>
+      Tópico de Publicação
+      <input type="text" name="mqtt_topic_pub" placeholder="sensor">
+    </label>
+
+    <label>
+      Tópico de Subscribe
+      <input type="text" name="mqtt_topic_sub" placeholder="cmd">
+    </label>
+  </fieldset>
+
+  <!-- ================= COMPORTAMENTO ================= -->
+  <fieldset>
+    <legend>Comportamento</legend>
+
+    <label>
+      QoS de Publicação
+      <select name="mqtt_qos_pub">
+        <option value="0">0 - No máximo uma vez</option>
+        <option value="1" selected>1 - Pelo menos uma vez</option>
+        <option value="2">2 - Exatamente uma vez</option>
+      </select>
+    </label>
+
+    <label>
+      QoS de Subscribe
+      <select name="mqtt_qos_sub">
+        <option value="0">0</option>
+        <option value="1" selected>1</option>
+        <option value="2">2</option>
+      </select>
+    </label>
+
+    <label>
+      Keep Alive (segundos)
+      <input type="number" name="mqtt_keepalive" value="60">
+    </label>
+
+    <label>
+      <input type="checkbox" name="mqtt_retain">
+      Publicar com Retain
+    </label>
+  </fieldset>
+
+  <!-- ================= AVANÇADO ================= -->
+  <details>
+    <summary>Configurações Avançadas</summary>
+
+    <fieldset>
+      <legend>Last Will and Testament (LWT)</legend>
+
+      <label>
+        Tópico LWT
+        <input type="text" name="mqtt_lwt_topic" placeholder="status">
+      </label>
+
+      <label>
+        Mensagem LWT
+        <input type="text" name="mqtt_lwt_message" placeholder="offline">
+      </label>
+
+      <label>
+        QoS LWT
+        <select name="mqtt_lwt_qos">
+          <option value="0">0</option>
+          <option value="1" selected>1</option>
+          <option value="2">2</option>
+        </select>
+      </label>
+
+      <label>
+        <input type="checkbox" name="mqtt_lwt_retain">
+        Retain no LWT
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Reconexão</legend>
+
+      <label>
+        <input type="checkbox" name="mqtt_auto_reconnect" checked>
+        Reconectar automaticamente
+      </label>
+
+      <label>
+        Intervalo de reconexão (s)
+        <input type="number" name="mqtt_reconnect_interval" value="5">
+      </label>
+    </fieldset>
+  </details>
+
+</section>
+
+
+

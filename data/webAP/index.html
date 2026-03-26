@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network - MyIoT</title>
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="./loadHtml.js" defer></script>
+</head>
+
+<body>
+
+    <!-- <form action="/connect" method="get"> -->
+    <form method="post">
+
+        <span id="network-header">
+            <h1>Redes</h1>
+            <span onclick="loadNetworks()"> <img src="../assets/refreshIcon.svg" id="refreshIcon"> </span>
+        </span>
+
+        <ul id="network-list">
+        </ul>
+
+        <div id="popup-placeholder"></div>
+
+    </form>
+
+<style>
+    :root{
+        --button-color: rgb(69, 71, 94);
+        --backgnd-color: rgb(231, 249, 255);
+        --selected-color: rgb(124, 124, 124);
+        --connect-division-color: rgb(94, 94, 94);
+    }
+
+    body{
+        font-family: Arial, Helvetica, sans-serif;
+        background-image: linear-gradient(90deg, gray, white);
+        padding: 0;
+        margin: 0;
+    }
+
+    form{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 40px;
+
+        border-radius: 4px;
+        background-color: rgb(68,68,68);
+        color: white;
+        box-shadow: 5px 5px 2px rgb(190, 190, 190);
+
+        width: 400px;
+        /* max-width: 100vw; */
+        max-width: 90vw;
+        
+    }
+
+    @media (max-width: 500px) {
+        body{
+            background-image: none;
+        }
+
+        form{
+            width: 95vw;
+            padding: 25px;
+
+            transform: translate(-50%, -50%) scale(0.9);
+        }
+
+        #network-header h1{
+            font-size: 22px;
+        }
+
+        .passwordInput{
+            max-width: 50vw;
+        }
+    }
+
+
+    #network-header{
+        display: flex;
+        border-radius: 2px;
+        border-bottom: 2px solid #fff;
+        margin-bottom: 0;
+    /* padding-bottom: 10px; */
+        justify-content: space-between;
+        user-select: none;
+    }
+
+    #network-header span{
+        padding: 10px;
+        display: block;
+        height: 40px;
+        cursor: pointer;
+    }
+
+    #network-header span:hover{
+        background-color: var(--selected-color);
+    }
+
+    #network-header span img{
+        width: 32px;
+    }
+
+    #network-list{
+        padding: 0px;
+        list-style: none;
+    }
+
+    #network-list li .network-radio{
+        display: none;
+    }
+
+    #network-list li label{
+        cursor: pointer;
+        user-select: none;
+        margin: 4px 2px 0px 2px;
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        user-select: none;
+
+        justify-content: space-between;
+    }
+
+    #network-list li label span{
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+    }
+
+    #network-list .conect-division, #network-list .password-division{
+        background-color: var(--connect-division-color);
+        margin: 0px 2px;
+        height: 55px;
+        
+
+        display: none;
+        justify-content:space-around;
+        align-items: center;
+        user-select: none;
+        
+        transition: all 0.4s ease;
+    }
+
+    #network-list .conect-division span{
+        font-size: 14px;
+        padding: 2px;
+        padding-right: 4px;
+        user-select: none;
+        display: flex;
+    }
+
+    #network-list .conect-division span:before{
+        content: "";
+        display: inline-block;
+
+        height: 8px;
+        width: 8px;
+        margin-right: 10px;
+
+        background-color: white;
+        box-shadow: 0px 0px 1px black;
+        border: 4px solid white;
+        border-radius: 10px;
+
+        transition: background-color 0.2s ease;
+    }
+
+    #network-list .conect-division label input[type="checkbox"]:checked + span:before{
+        background-color: darkblue;
+    }
+
+    #network-list li .label_selected{
+        height: 80px;
+    }
+
+    .network-radio[type="radio"]:not(:checked) + label:hover {/*    <--------------------*/
+        background-color: var(--selected-color);
+    }
+
+    .network-radio[type="radio"]:checked + label {
+        background-color: var(--selected-color);
+    }
+
+    #network-list li img{
+        width: 40px;
+    }
+
+    #network-list li .network-security{
+        width: 15px;
+        transform: translate(-12px, 6px);
+    }
+
+    .remember-me{
+        display: none;
+    }
+
+    .connect-button{
+        border: none;
+        color: white;
+        padding: 6px 8px;
+        
+        background-color: var(--button-color);
+        border: 1.4px solid var(--button-color);
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .connect-button:hover{
+        /* background-color: blueviolet; */
+        border: 1.4px solid white;
+    }
+
+    .connecting-img{
+        width: 60%;
+        display: none;
+    }
+
+    .passwordInput{
+        display: flex;
+        padding: 5px 15px;
+        outline: none;
+
+        font-size: 18px;
+        color: var(--button-color);
+        /* background-color: rgba(255, 255, 255, 0.692); */
+        background-color: rgb(214, 214, 214);;
+        
+        border-radius: 2px;
+        border: none;
+        margin-left: 6px;
+        letter-spacing: 2px;
+
+        box-shadow: inset 0px 0px 26px rgba(255, 255, 255, 0.75);
+    }
+
+    .spin {
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(-360deg); }
+    }
+
+</style>
+
+</body>
+
+</html>

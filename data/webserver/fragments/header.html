@@ -1,0 +1,49 @@
+<header class="header">
+
+    <img src="../assets/burgerIcon.svg" alt="burger icon" id="burger-icon">
+    <!-- <div id="space"></div> -->
+    <img src="../assets/logo.png" alt="logo" id="logo-img" draggable="false">
+
+    <img src="../assets/userIcon.svg" alt="" id="user-icon" draggable="false">
+
+</header>
+
+<style>
+
+    #burger-icon{
+        width: 50px;
+        cursor: pointer;
+    }
+
+    #logo-img{
+        width: 200px;
+    }
+
+    #user-icon{
+        width: 40px;
+        cursor: pointer;
+    }
+
+    .header{
+        height: 100px;
+        background: var(--bg-header);
+        color: var(--color-text);
+        display: flex;
+        align-items: center;
+        padding: 20px 50px;
+        font-size: 1.1rem;
+
+        -webkit-user-drag: none;
+        -webkit-user-drag: none;
+        user-select: none;
+
+        justify-content: space-between;
+    }
+
+    #space{
+        /* display: block; */
+        width: 40px;
+    }
+
+</style>
+
