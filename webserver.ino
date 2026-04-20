@@ -113,7 +113,7 @@ void serverLoop(){
     delay(10000);
     webServerAPstop(); // Ideal aqui é esperar a resposta do /kill
     webServerInit();
-    initMqtt();
+    //initMqtt();
   }
 
 }
@@ -152,6 +152,52 @@ void handleConnect(){
 
 // =======  WEB server ==========
 
+void webServerRoutes(){
+
+  // assets
+  server->serveStatic("/assets/favicon.ico", LittleFS, "/assets/favicon.ico");
+  server->serveStatic("/assets/burgerIcon.svg", LittleFS, "/assets/burgerIcon.svg");
+  server->serveStatic("/assets/userIcon.svg", LittleFS, "/assets/userIcon.svg");
+  server->serveStatic("/assets/logo.png", LittleFS, "/assets/logo.png");
+  // server->serveStatic("/assets/padlockIcon.svg", LittleFS, "/assets/padlockIcon.svg");
+  // server->serveStatic("/assets/refreshIcon.svg", LittleFS, "/assets/refreshIcon.svg");
+  // server->serveStatic("/assets/wifiIcon_1.svg", LittleFS, "/assets/wifiIcon_1.svg");
+  // server->serveStatic("/assets/wifiIcon_2.svg", LittleFS, "/assets/wifiIcon_2.svg");
+  // server->serveStatic("/assets/wifiIcon_3.svg", LittleFS, "/assets/wifiIcon_3.svg");
+  // server->serveStatic("/assets/wifiIcon_4.svg", LittleFS, "/assets/wifiIcon_4.svg");
+  // server->serveStatic("/assets/connecting.svg", LittleFS, "/assets/connecting.svg");
+
+  // script and template
+  server->serveStatic("/scripts/script.js", LittleFS, "/webserver/scripts/script.js");
+  server->serveStatic("/style.css", LittleFS, "/webserver/style.css");
+
+  server->serveStatic("/fragments/header.html", LittleFS, "/webserver/fragments/header.html");
+  server->serveStatic("/fragments/sidebar.html", LittleFS, "/webserver/fragments/sidebar.html");
+
+  server->serveStatic("/pages/home.html", LittleFS, "/webserver/pages/home.html");
+  server->serveStatic("/pages/config.html", LittleFS, "/webserver/pages/config.html");
+  server->serveStatic("/pages/logs.html", LittleFS, "/webserver/pages/logs.html");
+  server->serveStatic("/pages/monitor.html", LittleFS, "/webserver/pages/monitor.html");
+  server->serveStatic("/pages/mqtt.html", LittleFS, "/webserver/pages/mqtt.html");
+  server->serveStatic("/pages/net.html", LittleFS, "/webserver/pages/net.html");
+
+  // server->serveStatic("/popup.html", LittleFS, "/webAP/popup.html");
+
+    // api
+  // server->on("/network", [](){
+    // server->send(200, "application/json", networkJsonList());
+  // });
+
+  // server->on("/connect", HTTP_POST, handleConnect);
+
+  //main
+  server->on("/", [](){
+    server->send(200, "text/html", readFile("/webserver/index.html"));
+  });
+
+
+}
+
 void webServerInit(){
 
   if(server){
@@ -165,11 +211,7 @@ void webServerInit(){
 
   server = new WebServer(80);
 
-  server->on("/", [](){
-    server->send(200, "text/html", "<h2> RODANDO </h2>");
-    // server->send(200, "text/html", readFile("/webserver/index.html"));
-  });
-
+  webServerRoutes();
 
   Serial.print("WBS iniciado\n");
 

@@ -18,7 +18,7 @@ void setup(){
 void loop(){
   gpioUpdate();
 
-  mqttLoop();
+  // mqttLoop();
 
   promptLoop();
 

@@ -1,4 +1,32 @@
 
+let pageCache = {};
+
+
+async function preloadPages(){
+
+    const pages = {
+        "home":     "/pages/home.html",
+        "mqtt":     "/pages/mqtt.html",
+        "net":      "/pages/net.html",
+        "logs":     "/pages/logs.html",
+        "monitor":  "/pages/monitor.html",
+        "config":   "/pages/config.html"
+    };
+
+    for(const key in pages){
+        try{
+            const res = await fetch(pages[key], {cache: "no-cache"});
+            if(res.ok){
+                pageCache[key] = await res.text();
+            } else {
+                console.error("Erro ao carregar", pages[key]);
+            }
+        } catch(err){
+            console.error("Fetch falhou:", pages[key], err);
+        }
+    }
+}
+
 async function loadFragment(input, selector){
     try{
         let html = "";
@@ -14,8 +42,9 @@ async function loadFragment(input, selector){
 
         }
         
+        // document.querySelector(selector).innerHTML += html;
+        document.querySelector(selector).insertAdjacentHTML("beforeend", html);
 
-        document.querySelector(selector).innerHTML += html;
         // Ajuste dinâmico de ano (se presente)
         const yEl = document.querySelector(selector + ' #year');
         if(yEl) yEl.textContent = new Date().getFullYear();
@@ -39,16 +68,17 @@ function clearComponent(id) {
 
 async function initialLoadFragments(){
 
-    const headerPath = "./fragments/header.html"
-    const sidebarPath = "./fragments/sidebar.html"
-    const headerPH  = "#header-placeholder";
-    const sidebarPH = "#sidebar-placeholder";
-    const headerContent = await fetch(headerPath).then(r => r.text());
-    const sidebarContent = await fetch(sidebarPath).then(r => r.text());
+    await preloadPages();
 
-    loadFragment(headerContent, headerPH);
-    loadFragment(sidebarContent, sidebarPH);
+    const headerCntt = await fetchSafe("/fragments/header.html");
+    const sidebarCntt = await fetchSafe("/fragments/sidebar.html");
 
+    await loadFragment(headerCntt, "#header-placeholder");
+    await loadFragment(sidebarCntt, "#sidebar-placeholder");
+
+    clearComponent("#content");
+    await loadFragment(pageCache["home"], "#content");
+    
 
     // Adiciona listner para abrir/fechar menu lateral
     const sidebarClass = ".sidebar";
@@ -66,37 +96,56 @@ async function initialLoadFragments(){
 
 async function listnerSidebarClick(event){
 
-    if(event.target.tagName !== "A"){
-        return 0;
-    }
+    const link = event.target.closest("a");
+    if(!link) return;
+    
     event.preventDefault();
 
+    const page = link.dataset.page;
 
-    const listOfPages = {
-        "home":     "./pages/home.html",
-        "mqtt":     "./pages/mqtt.html",
-        // "net":      "./pages/net.html",
-        "net":      "../webAP/index.html",
-        "logs":     "./pages/logs.html",
-        "monitor":  "./pages/monitor.html",
-        "config":   "./pages/config.html"
+    if(!page){
+        console.warn("Link sem data-page");
+        return;
+    }
+
+    if(!pageCache[page]){
+        console.error("Página não carregada no cache:", page);
+        return;
     }
 
     const contentPH = "#content";
-    const page = event.target.dataset.page;
-    let cntt = "";
-    
-    if(listOfPages[page]){
-        cntt = await fetch(listOfPages[page]).then(r => r.text());
-    }
-    else{
-        cntt = "";
-        console.log(page + "não é uma página válida.");
-        return 0;
-    }
 
     clearComponent(contentPH);
-    loadFragment(cntt, contentPH);
+    await loadFragment(pageCache[page], contentPH);
+
+    
+    //close sidebar
+    const sidebar = document.querySelector(".sidebar");
+    if(sidebar){
+        sidebar.classList.remove("show");
+    }
+
+}
+
+async function fetchSafe(path, options = {}){
+
+    try{
+        const res = await fetch(path, {
+            cache: "no-cache",
+            ...options
+        });
+
+        if(!res.ok){
+            console.error(`HTTP ${res.status} ao carregar: ${path}`);
+            return "";
+        }
+
+        return await res.text();
+    }
+    catch(err){
+        console.error(`Erro de rede ao carregar: ${path}`, err);
+        return "";
+    }
 }
 
 initialLoadFragments();

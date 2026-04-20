@@ -135,7 +135,7 @@ int initWifi(){
 
     webServerInit();
 
-    initMqtt();
+    //initMqtt();
 
     return 1;
   }
