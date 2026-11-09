@@ -2,8 +2,9 @@
 #define N_OUTPUT 3
 #define N_INPUT  6
 
-const int InputPins[N_INPUT]   = {34, 35, 32, 33, 25, 26};
-const int OutputPins[N_OUTPUT] = {13, 12, 14};
+const int InputPins[N_INPUT]   = {13, 14, 27, 26, 25, 33}; // Used for 30 pins module
+// const int InputPins[N_INPUT]   = {12, 27, 26, 25, 33, 32}; // Used for 38 pins module
+const int OutputPins[N_OUTPUT] = {15, 23, 22};
 
 bool input[N_INPUT];
 bool output[N_OUTPUT];
@@ -22,16 +23,24 @@ void gpioBegin(){
   }
 }
 
-void gpioUpdate(){
+bool gpioUpdate(){
   int i;
 
+  bool input_changed = false;
+
   for(i = 0; i < N_INPUT; i++){
-    input[i] = digitalRead(InputPins[i]);
+
+    if( input[i] != (!digitalRead(InputPins[i])) ){
+      input[i] = (!digitalRead(InputPins[i]));
+      input_changed = true;
+    }
   }
 
   for(i = 0; i < N_OUTPUT; i++){
     digitalWrite(OutputPins[i], output[i]);
   }
+
+  return input_changed;
 }
 
 String inputJson(bool in[]){

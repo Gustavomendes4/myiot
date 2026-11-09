@@ -1,0 +1,93 @@
+<div id="popup" class="popup hidden">
+  <div class="popup-box">
+    <h2>Conexão realizada com sucesso!</h2>
+    <p id="popupText">Webserver será finalizado. Acesse a rede via ...</p>
+
+    <br>
+
+    <div class="popup-row">
+        <span class="popup-span">Rede</span>
+        <span id="popup-ssid"></span>
+    </div>
+
+    <br>
+
+    <div class="popup-row">
+        <span class="popup-span">IP</span>
+        <span id="popup-ip"></span>
+    </div>
+
+    <br><br>
+
+    <button id="popupOk">OK</button>
+  </div>
+</div>
+
+
+<style>
+    
+#popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.733);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+#popup h2, #popup p{
+    user-select: none;
+}
+
+.popup-row{
+    display: flex;
+}
+
+.popup-box {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+
+    color: black;
+}
+
+.hidden {
+    display: none;
+}
+
+#popupOk{
+    padding: 8px 30px;
+    background-color: var(--button-color);
+    color: #fff;
+    border-radius: 6px;
+    border: none;
+
+    box-shadow: 1px 1px 1px 1px rgb(223, 223, 223);
+
+    cursor: pointer;
+}
+
+.popup-span{
+    display: block;
+    padding: 10px 20px;
+    background-color: rgb(94, 94, 94);
+    color: #fff;
+    border-radius: 3px;
+
+    width: 10%;
+    min-width: 40px;
+    margin-right: 12px;
+    text-align: center;
+
+    user-select: none;
+
+}
+
+#popup-ip, #popup-ssid{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+</style>

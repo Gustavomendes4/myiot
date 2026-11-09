@@ -7,11 +7,15 @@ PubSubClient MQTT(espClient);
 //mosquitto_sub -h test.mosquitto.org -p 1883 -t g7f3b92e1c4a8d29f0b1 -v
 //mosquitto_pub -h test.mosquitto.org -p 1883 -t g7f3b92e1c4a8d29f0b1 -m "teste"
 
+// const char* BROKER_MQTT = "test.mosquitto.org";
+// const int   BROKER_PORT = 1883;
+// const char* ID_MQTT     = "MYIOT";
+
 const char* BROKER_MQTT = "test.mosquitto.org";
 const int   BROKER_PORT = 1883;
 const char* ID_MQTT     = "MYIOT";
 
-const char* TOPIC_MQTT  = "g7f3b92e1c4a8d29f0b1";
+const char* TOPIC_MQTT  = "uergs";
 
 const char* MQTT_USER = "usuario";
 const char* MQTT_PASS = "senha";

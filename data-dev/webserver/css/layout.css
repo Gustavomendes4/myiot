@@ -1,0 +1,46 @@
+
+/* ===== Layout ===== */
+.container {
+    min-height: 100vh;
+
+    max-width: 900px;
+    margin: auto;
+}
+
+.container header {
+    margin-bottom: 28px;
+}
+
+.container header h1 {
+    margin-bottom: 8px;
+    font-size: 28px;
+}
+
+.container header p {
+    color: var(--muted);
+}
+
+
+/* ===== Main ===== */
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* ===== Content ===== */
+#content {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.card{
+    background: var(--surface);
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    /* box-shadow: 0 2px 5px rgba(0,0,0,0.1); */
+}

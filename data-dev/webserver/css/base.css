@@ -1,0 +1,47 @@
+
+:root{
+    
+    /* === BASE === */
+    --bg-main: #d2e1ff;/* --bg-main: #0B1220; */
+    --bg-sidebar: #111C2E;
+    --bg-header: #0f172a;
+
+    /* Surfaces */
+    --surface: #111C2E;
+    --surface2: #1B2A40;
+
+    /* Borders */
+    --border: #2B3B52;
+    --input-border-color: #34465F;
+
+    /* Text */
+    --text: #f7e5e5;
+    --muted: #94A3B8;
+    --label-text-color: #CBD5E1;
+    --placeholder: #687B95;
+
+    /* Accent */
+    --accent: #2DD4BF;
+    --accent-hover: #5EEAD4;
+    --accent-text: #06201E;
+
+    /* Status */
+    --danger: #ff7777;
+
+}
+
+/* Global reset */
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+    background: var(--bg-main);
+    color: var(--text);
+    height: 100%;
+}
+

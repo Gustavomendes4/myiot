@@ -1,0 +1,30 @@
+<li>
+    <input id="radio{ID}" class="network-radio" type="radio" name="network-radio" value="net{ID}">
+    <label for="radio{ID}">
+        <span>
+            <img src="../assets/wifiIcon_{WIFI_IMG}.svg" alt=".">
+            <img class="network-security" src="../assets/padlockIcon.svg" alt=".">
+            {SSID}
+        </span>
+            
+        <img src="../assets/connecting.svg" alt="." class="connecting-img">
+
+        
+    </label>
+    <div class="conect-division">
+        <label for="remember{ID}">
+            <input type="checkbox" id="remember{ID}" class="remember-me" name="remember{ID}" value="1">
+
+            <span>Conectar automaticamente</span>
+        </label>
+
+        <br><br>
+        <button class="connect-button" type="button" onclick="connectClick({ID})">Conectar</button>
+    </div>
+
+    <div class="password-division">
+        <input type="password" id="pass{ID}" class="passwordInput" name="pass{ID}">
+        <button class="connect-button" type="button" onclick="connectClick({ID})">Conectar</button>
+    </div>
+
+</li>

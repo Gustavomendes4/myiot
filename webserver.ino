@@ -113,7 +113,7 @@ void serverLoop(){
     delay(10000);
     webServerAPstop(); // Ideal aqui é esperar a resposta do /kill
     webServerInit();
-    //initMqtt();
+    initMqtt();
   }
 
 }
@@ -159,13 +159,6 @@ void webServerRoutes(){
   server->serveStatic("/assets/burgerIcon.svg", LittleFS, "/assets/burgerIcon.svg");
   server->serveStatic("/assets/userIcon.svg", LittleFS, "/assets/userIcon.svg");
   server->serveStatic("/assets/logo.png", LittleFS, "/assets/logo.png");
-  // server->serveStatic("/assets/padlockIcon.svg", LittleFS, "/assets/padlockIcon.svg");
-  // server->serveStatic("/assets/refreshIcon.svg", LittleFS, "/assets/refreshIcon.svg");
-  // server->serveStatic("/assets/wifiIcon_1.svg", LittleFS, "/assets/wifiIcon_1.svg");
-  // server->serveStatic("/assets/wifiIcon_2.svg", LittleFS, "/assets/wifiIcon_2.svg");
-  // server->serveStatic("/assets/wifiIcon_3.svg", LittleFS, "/assets/wifiIcon_3.svg");
-  // server->serveStatic("/assets/wifiIcon_4.svg", LittleFS, "/assets/wifiIcon_4.svg");
-  // server->serveStatic("/assets/connecting.svg", LittleFS, "/assets/connecting.svg");
 
   // script and template
   server->serveStatic("/scripts/script.js", LittleFS, "/webserver/scripts/script.js");
@@ -181,14 +174,6 @@ void webServerRoutes(){
   server->serveStatic("/pages/mqtt.html", LittleFS, "/webserver/pages/mqtt.html");
   server->serveStatic("/pages/net.html", LittleFS, "/webserver/pages/net.html");
 
-  // server->serveStatic("/popup.html", LittleFS, "/webAP/popup.html");
-
-    // api
-  // server->on("/network", [](){
-    // server->send(200, "application/json", networkJsonList());
-  // });
-
-  // server->on("/connect", HTTP_POST, handleConnect);
 
   //main
   server->on("/", [](){

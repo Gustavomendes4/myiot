@@ -1,0 +1,178 @@
+/* =========================
+   Labels
+========================= */
+
+.form-label {
+    font-size: 13px;
+    font-weight: 600;
+
+    color: var(--label-text-color);
+}
+
+
+/* =========================
+   Form controls
+========================= */
+
+.form-control {
+    width: 100%;
+    height: 42px;
+    padding: 10px 12px;
+
+    border: 1px solid var(--input-border-color);
+    border-radius: 7px;
+
+    background: #0D1727;
+    color: var(--text);
+
+    outline: none;
+}
+
+.form-control:focus {
+    border-color: var(--accent);
+}
+
+.form-control::placeholder {
+    color: var(--placeholder);
+}
+
+
+/* =========================
+   Field
+========================= */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.field.full {
+    grid-column: span 2;
+}
+
+.field-hint{
+    color: var(--muted);
+    font-size: 11px;
+}
+
+
+/* =========================
+   Checkbox
+========================= */
+
+.checkbox-field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 42px;
+}
+
+.checkbox-field label {
+    font-weight: normal;
+}
+
+.checkbox-field input[type="checkbox"] {
+    accent-color: var(--accent);
+    width: 16px;
+    height: 16px;
+}
+
+
+/* =========================
+   Buttons
+========================= */
+
+button {
+    height: 40px;
+    padding: 0 18px;
+
+    border-radius: 7px;
+    border: 1px solid var(--border);
+
+    background: var(--surface2);
+    color: var(--text);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    border-color: var(--accent);
+}
+
+button.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-text);
+}
+
+button.primary:hover {
+    background: var(--accent-hover);
+}
+
+
+/* =========================
+   Form layout
+========================= */
+
+.divider {
+    border-top: 1px solid var(--border);
+    margin: 22px 0;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-top: 22px;
+    flex-wrap: wrap;
+}
+
+.feedback {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
+
+/* =========================
+   Responsive
+========================= */
+@media (max-width: 600px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .field.full {
+        grid-column: auto;
+    }
+
+    .actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .buttons button:last-child {
+        grid-column: span 2;
+    }
+
+    .buttons button {
+        width: 100%;
+    }
+}

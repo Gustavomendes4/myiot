@@ -1,17 +1,20 @@
 #include <WiFi.h>
 #include "definition.h"
 
-const int wifi_tries = 20;
+const int wifi_tries = 100;
 bool WIFIconnected = false;
 
 
-WifiConnectResult connectWifi(String ssid, String pass, String* ip = NULL, bool verb = false){
+WifiConnectResult connectWifi(String ssid, String pass, String* ip, bool verb){
 
   WiFi.disconnect(true);  
   WiFi.mode(WIFI_MODE_APSTA);
   delay(200);
 
-  WiFi.begin(ssid, pass.c_str());
+
+  Serial.println("ssid: " + ssid + "\npass: " + pass);
+
+  WiFi.begin(ssid.c_str(), pass.c_str());
 
   if(verb){
     Serial.print("\nConectando à rede: ");
@@ -23,8 +26,13 @@ WifiConnectResult connectWifi(String ssid, String pass, String* ip = NULL, bool 
   int i = 0;
   while(WiFi.status() != WL_CONNECTED){
     delay(100);
-      
+    // vTaskDelay( pdMS_TO_TICKS(100) );
+    // yield();
+    
+
     if(i++ == wifi_tries){
+      
+      Serial.println(",,");
       if(verb)
         Serial.println("Erro ao conectar à rede Wifi");
       
@@ -32,9 +40,13 @@ WifiConnectResult connectWifi(String ssid, String pass, String* ip = NULL, bool 
       break;
     }
 
-    if(verb)
+    if(verb){
       Serial.print(".");
+    }
   }
+
+  
+  Serial.println("eol,");
 
   if(WiFi.status() == WL_CONNECTED){
 
@@ -102,6 +114,7 @@ bool findNetwork(){
   static WifiSavedList   saved;
   
   int len1 = scanWifiNetworks(availb);
+
   int len2 = readSavedNetwork(saved);
 
   if(len1 <= 0 || len2 <= 0) return false;
@@ -114,9 +127,14 @@ bool findNetwork(){
 
       if( strcmp(availb[i].ssid, saved[j].ssid) == 0){
 
-        if( connectWifi(saved[j].ssid, saved[j].pass) == WIFI_OK){
+        Serial.println("a");
+        if( connectWifi(saved[j].ssid, saved[j].pass, NULL, true) == WIFI_OK){
+          
+          Serial.println("b");
           return true;
         }
+        
+          Serial.println("c");
 
       }
     }
@@ -135,17 +153,17 @@ int initWifi(){
 
     webServerInit();
 
-    //initMqtt();
+    initMqtt();
 
     return 1;
   }
   else{
+    
     WIFIconnected = false;
     webServerAPInit();
     return 0;
   }
 
-  // return 1;
 }
 
 void printWifiStatus(){

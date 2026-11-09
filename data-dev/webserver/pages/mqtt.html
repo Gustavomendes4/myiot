@@ -1,0 +1,369 @@
+
+<style>
+
+.panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 18px;
+}
+
+.panel h2 {
+    margin: 0 0 20px;
+    font-size: 18px;
+
+    color: var(--text);
+}
+
+details {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 18px;
+}
+
+summary {
+    padding: 20px 24px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.advanced-content {
+    padding: 0 24px 24px;
+}
+
+.advanced-content h3 {
+    font-size: 15px;
+    margin: 20px 0;
+}
+
+</style>
+
+
+<section class="container" id="mqtt-config">
+
+    <header>
+        <h1>Configuração MQTT</h1>
+        <p>Configure a conexão do dispositivo com o broker MQTT.</p>
+    </header>
+
+    <form id="mqtt-form">
+
+    <!-- CONEXÃO -->
+    <section class="panel">
+        
+        <h2>01. Conexão com o Broker</h2>
+
+        <div class="form-grid">
+
+            <div class="field full">
+                <label class="form-label">Endereço do Broker</label>
+                
+                <input class="form-control" type="text" name="mqtt_broker" placeholder="mqtt.exemplo.com ou 192.168.1.10" required>
+            </div>
+
+            <div class="field">
+                <label class="form-label">Porta</label>
+                <input class="form-control" type="number" name="mqtt_port" value="1883" min="1" max="65535" required>
+            </div>
+
+            <div class="field">
+                <label class="form-label">Versão MQTT</label>
+                <select name="mqtt_version" class="form-control">
+                    <option value="3.1.1">MQTT 3.1.1</option>
+                    <option value="5.0">MQTT 5.0</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label class="form-label">Timeout (segundos)</label>
+                <input class="form-control" type="number" name="mqtt_connect_timeout" value="10" min="1">
+            </div>
+
+            <div class="field">
+                <label class="form-label">TLS</label>
+                <div class="checkbox-field">
+                    <input type="checkbox" name="mqtt_tls">
+                    <label>Utilizar conexão criptografada</label>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- IDENTIFICAÇÃO -->
+    <section class="panel">
+        <h2>02. Identificação</h2>
+
+        <div class="form-grid">
+
+            <div class="field full">
+                <label class="form-label">Client ID</label>
+                <input class="form-control" type="text" name="mqtt_client_id" placeholder="machine001">
+                <small class="field-hint">Se vazio, o dispositivo poderá gerar automaticamente.</small>
+            </div>
+
+            <div class="field">
+                <label class="form-label">Usuário</label>
+                <input class="form-control" type="text" name="mqtt_user">
+            </div>
+
+            <div class="field">
+                <label class="form-label">Senha</label>
+                <input class="form-control" type="password" name="mqtt_password">
+            </div>
+
+        </div>
+    
+    </section>
+
+    <!-- TÓPICOS -->
+    <section class="panel">
+        <h2>03. Tópicos</h2>
+
+        <div class="form-grid">
+
+            <div class="field full">
+                <label class="form-label">Tópico Base</label>
+                <input class="form-control" type="text" name="mqtt_topic_base" placeholder="turqe/machine001">
+            </div>
+
+            <div class="field">
+                <label class="form-label">Tópico de Publicação</label>
+                <input class="form-control" type="text" name="mqtt_topic_pub" placeholder="telemetry">
+            </div>
+
+            <div class="field">
+                <label class="form-label">Tópico de Subscribe</label>
+                <input class="form-control" type="text" name="mqtt_topic_sub" placeholder="commands">
+            </div>
+
+        </div>
+    </section>
+
+    <!-- COMUNICAÇÃO -->
+    <section class="panel">
+        <h2>04. Comportamento</h2>
+
+        <div class="form-grid">
+
+            <div class="field">
+                <label class="form-label">QoS de Publicação</label>
+                <select class="form-control" name="mqtt_qos_pub">
+                    <option value="0">0 - No máximo uma vez</option>
+                    <option value="1" selected>1 - Pelo menos uma vez</option>
+                    <option value="2">2 - Exatamente uma vez</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label class="form-label">QoS de Subscribe</label>
+                <select class="form-control" name="mqtt_qos_sub">
+                    <option value="0">0</option>
+                    <option value="1" selected>1</option>
+                    <option value="2">2</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label class="form-label">Keep Alive (segundos)</label>
+                <input class="form-control" type="number" name="mqtt_keepalive" value="60">
+            </div>
+
+            <div class="field">
+                <label class="form-label">Retain</label>
+                <div class="checkbox-field">
+                    <input class="form-control" type="checkbox" name="mqtt_retain">
+                    <label>Publicar com Retain</label>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="form-label">Clean Session</label>
+                <div class="checkbox-field">
+                    <input type="checkbox" name="mqtt_clean_session" checked>
+                    <label>Utilizar sessão limpa</label>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- AVANÇADO -->
+    <details>
+        <summary>05. Configurações Avançadas</summary>
+
+        <div class="advanced-content">
+
+            <h3>Last Will and Testament (LWT)</h3>
+
+            <div class="form-grid">
+
+                <div class="field full">
+                    <label class="form-label">Tópico LWT</label>
+                    <input class="form-control" type="text" name="mqtt_lwt_topic" placeholder="turqe/machine001/status">
+                </div>
+
+                <div class="field full">
+                    <label class="form-label">Mensagem LWT</label>
+                    <input class="form-control" type="text" name="mqtt_lwt_message" value="offline">
+                </div>
+
+                <div class="field">
+                    <label class="form-label">QoS LWT</label>
+                    <select class="form-control" name="mqtt_lwt_qos">
+                        <option value="0">0</option>
+                        <option value="1" selected>1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label class="form-label">Retain LWT</label>
+                    <div class="checkbox-field">
+                        <input class="form-control" type="checkbox" name="mqtt_lwt_retain" checked>
+                        <label>Habilitar Retain</label>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="divider"></div>
+
+            <h3>Reconexão</h3>
+
+            <div class="form-grid">
+
+                <div class="field">
+                    <label class="form-label">Reconexão Automática</label>
+                    <div class="checkbox-field">
+                        <input class="form-control" type="checkbox" name="mqtt_auto_reconnect" checked>
+                        <label>Habilitar reconexão</label>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="form-label">Intervalo de Reconexão (s)</label>
+                    <input class="form-control" type="number" name="mqtt_reconnect_interval" value="5" min="1">
+                </div>
+
+                <div class="field">
+                    <label class="form-label">Intervalo Máximo (s)</label>
+                    <input class="form-control" type="number" name="mqtt_reconnect_max_interval" value="60" min="1">
+                </div>
+
+            </div>
+
+        </div>
+    </details>
+
+    <!-- AÇÕES -->
+    <div class="actions">
+
+        <div class="feedback" id="form-feedback">
+            Configuração não aplicada.
+        </div>
+
+        <div class="buttons">
+            <button type="button" id="test-connection" onclick="testCallback()">
+                Testar conexão
+            </button>
+
+            <button type="button" class="primary" id="apply-config" onclick="submit_Callback()">
+                Apply
+            </button>
+        </div>
+
+    </div>
+
+    </form>
+</section>
+
+<script>
+const form = document.getElementById("mqtt-form");
+const feedback = document.getElementById("form-feedback");
+
+function getConfig() {
+    const data = new FormData(form);
+    const config = {};
+
+    for (const [key, value] of data.entries()) {
+        const element = form.elements[key];
+
+        if (element.type === "checkbox") {
+            config[key] = element.checked;
+        } else if (element.type === "number") {
+            config[key] = Number(value);
+        } else {
+            config[key] = value;
+        }
+    }
+
+    form.querySelectorAll('input[type="checkbox"]').forEach(element => {
+        config[element.name] = element.checked;
+    });
+
+    return config;
+}
+
+async function request(url, method) {
+    const config = getConfig();
+
+    const response = await fetch(url, {
+        method: method,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(config)
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+        throw new Error(result.detail || "Erro na requisição.");
+    }
+
+    return result;
+}
+
+form.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    try {
+        const result = await request("/api/mqtt/config", "PUT");
+        feedback.textContent = result.message || "Configuração salva.";
+    } catch (error) {
+        feedback.textContent = error.message;
+    }
+});
+
+document.getElementById("apply-config").addEventListener("click", async () => {
+    if (!form.reportValidity()) return;
+
+    try {
+        feedback.textContent = "Aplicando configuração...";
+
+        const result = await request("/api/mqtt/apply", "POST");
+
+        feedback.textContent = result.message || "Configuração aplicada.";
+    } catch (error) {
+        feedback.textContent = error.message;
+    }
+});
+
+document.getElementById("test-connection").addEventListener("click", async () => {
+    if (!form.reportValidity()) return;
+
+    try {
+        feedback.textContent = "Testando conexão...";
+
+        const result = await request("/api/mqtt/test", "POST");
+
+        feedback.textContent = result.message || "Teste concluído.";
+    } catch (error) {
+        feedback.textContent = error.message;
+    }
+});
+</script>

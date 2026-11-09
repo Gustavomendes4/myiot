@@ -1,17 +1,27 @@
 
 let pageCache = {};
+let scriptCache = {};
+
+const pages = {
+    "home":     "/pages/home.html",
+    "mqtt":     "/pages/mqtt.html",
+    "net":      "/pages/net.html",
+    "logs":     "/pages/logs.html",
+    "monitor":  "/pages/monitor.html",
+    "config":   "/pages/config.html"
+};
+
+const pageScripts = {
+    "home":     "/scripts/home.js",
+    "mqtt":     "/scripts/mqtt.js",
+    "net":      "/scripts/net.js",
+    "logs":     "/scripts/logs.js",
+    "monitor":  "/scripts/monitor.js",
+    "config":   "/scripts/config.js"
+};
 
 
 async function preloadPages(){
-
-    const pages = {
-        "home":     "/pages/home.html",
-        "mqtt":     "/pages/mqtt.html",
-        "net":      "/pages/net.html",
-        "logs":     "/pages/logs.html",
-        "monitor":  "/pages/monitor.html",
-        "config":   "/pages/config.html"
-    };
 
     for(const key in pages){
         try{
@@ -25,6 +35,24 @@ async function preloadPages(){
             console.error("Fetch falhou:", pages[key], err);
         }
     }
+}
+
+async function preloadScripts(){
+
+    for(const [page, path] of Object.entries(pageScripts)){
+
+        if(!path) continue;
+
+        const ok = await loadScript(path);
+
+        if(ok){
+            scriptCache[path] = true;
+        } else {
+            console.warn("Falha ao carregar script:", page);
+        }
+    }
+
+    console.log("Scripts carregados:", Object.keys(scriptCache));
 }
 
 async function loadFragment(input, selector){
@@ -69,6 +97,10 @@ function clearComponent(id) {
 async function initialLoadFragments(){
 
     await preloadPages();
+    
+    setTimeout(() => {
+        preloadScripts();
+    }, 500);
 
     const headerCntt = await fetchSafe("/fragments/header.html");
     const sidebarCntt = await fetchSafe("/fragments/sidebar.html");
@@ -78,6 +110,16 @@ async function initialLoadFragments(){
 
     clearComponent("#content");
     await loadFragment(pageCache["home"], "#content");
+
+    if(pageScripts["home"]){
+        await loadScript(pageScripts["home"]);
+
+        const initFn = window["init_home"];
+        
+        if(typeof initFn === "function"){
+            initFn();
+        }
+    }
     
 
     // Adiciona listner para abrir/fechar menu lateral
@@ -113,18 +155,59 @@ async function listnerSidebarClick(event){
         return;
     }
 
+    // Carrega HTML
     const contentPH = "#content";
 
     clearComponent(contentPH);
     await loadFragment(pageCache[page], contentPH);
 
     
+    // Carrega Script
+    const scriptPath = pageScripts[page];
+
+    if(scriptPath){
+        await loadScript(scriptPath);
+
+        const initFn = window["init_" + page];
+        if(typeof initFn === "function"){
+            initFn();
+        }
+    }
+
+
     //close sidebar
     const sidebar = document.querySelector(".sidebar");
     if(sidebar){
         sidebar.classList.remove("show");
     }
 
+}
+
+async function loadScript(src){
+
+    // evita carregar duas vezes
+    if(scriptCache[src]){
+        return true;
+    }
+
+    return new Promise((resolve, reject) => {
+
+        const script = document.createElement("script");
+        script.src = src;
+        script.defer = true;
+
+        script.onload = () => {
+            scriptCache[src] = true;
+            resolve(true);
+        };
+
+        script.onerror = () => {
+            console.error("Erro ao carregar script:", src);
+            resolve(false);
+        };
+
+        document.body.appendChild(script);
+    });
 }
 
 async function fetchSafe(path, options = {}){
