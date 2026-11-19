@@ -1,6 +1,39 @@
 
-/.vscode/
+# ==========================================
+# ESP-IDF (Build & Configurações Locais)
+# ==========================================
+build/
+managed_components/
+dependencies.lock
 
-/build/*
+# Configurações locais e backups do menuconfig
+sdkconfig
+sdkconfig.old
+sdkconfig.ci*
 
-/managed_components
+# Arquivos temporários gerados pelo CMake/Ninja
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+!CMakeLists.txt
+
+# ==========================================
+# IDEs & Editores (VS Code, Eclipse, CLion)
+# ==========================================
+.vscode/
+.idea/
+.settings/
+.project
+.cproject
+*.code-workspace
+
+# ==========================================
+# Sistema Operacional & Outros
+# ==========================================
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+
